@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+data
+.env*
+*.pem
+.DS_Store
+npm-debug.log*
+.git
+.gitignore
+.vscode
+.idea
+*.tsbuildinfo
+next-env.d.ts

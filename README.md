@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Racha Contas
 
-## Getting Started
+Divisor de despesas domésticas para duas pessoas. Construído com Next.js, TypeScript, Tailwind CSS e SQLite.
 
-First, run the development server:
+## Início rápido — Docker (recomendado)
+
+**Requisito:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Windows/Mac) ou Docker Engine + Docker Compose (Linux).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <url-do-repo> racha-contas
+cd racha-contas
+docker compose up --build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra **http://localhost:3000** no navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+O banco de dados fica em `./data/expenses.db` na sua máquina e persiste entre reinicializações.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Próximas vezes** (imagem já construída):
+```bash
+docker compose up
+```
 
-## Learn More
+**Parar:**
+```bash
+docker compose down
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Início manual — sem Docker
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Requisitos:**
+- Node.js 20 ou 22
+- Ferramentas de compilação nativas para o `better-sqlite3`:
+  - **Linux:** `python3`, `make`, `g++` (geralmente pré-instalados)
+  - **macOS:** Xcode Command Line Tools (`xcode-select --install`)
+  - **Windows:** [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) (selecionar "Desktop development with C++")
 
-## Deploy on Vercel
+```bash
+git clone <url-do-repo> racha-contas
+cd racha-contas
+npm install
+npm run build
+npm start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Para desenvolvimento com hot reload:
+```bash
+npm run dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Acesso pela rede local (celular, outro computador):
+```bash
+npm start -- -H 0.0.0.0
+```
+
+---
+
+## Dados e backup
+
+- Banco de dados: `./data/expenses.db` (SQLite, arquivo único)
+- Para fazer backup: copie `./data/expenses.db` para outro local
+- Os arquivos `.db-shm` e `.db-wal` são auxiliares do modo WAL — se o app estiver rodando, copie os três juntos; se estiver parado, só `expenses.db` já basta
+
+## Solução de problemas
+
+**Erro de porta ocupada**
+Mude a porta no `docker-compose.yml` (`"3001:3000"`) ou use `npm start -- -p 3001`.
+
+**Erro de módulo nativo após trocar versão do Node.js**
+Recompile o `better-sqlite3` com `npm install`.
